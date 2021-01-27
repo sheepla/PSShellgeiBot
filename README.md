@@ -1,7 +1,7 @@
 
 # PSShellgeiBot
 
-PSShellgeiBot PowerShellから [websh] (https://github.com/jiro4989/websh) のAPIを使ってシェル芸を実行します。
+PSShellgeiBot PowerShellから [websh](https://github.com/jiro4989/websh) のAPIを使ってシェル芸を実行します。
 
 ## 環境・バージョン
 
