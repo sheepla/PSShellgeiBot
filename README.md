@@ -87,6 +87,6 @@ PS> . ./PSShellgeiBot/Invoke-ShellGeiBot.ps1
 
 ## 謝辞
 
-[jiro4989] (https://github.com/jiro4989) 様の [websh] (https://github.com/jiro4989/websh) APIを利用しています。
+[jiro4989](https://github.com/jiro4989) 様の [websh](https://github.com/jiro4989/websh) APIを利用しています。
 素晴らしいサービスをありがとうございます。
 
