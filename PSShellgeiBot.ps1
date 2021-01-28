@@ -5,7 +5,7 @@ function Invoke-ShellgeiBot
 
     Param
     (
-        [Parameter(Mandatory=$true, ValueFromPipeline=$true, ValueFromPipelineByPropertyName=$false Position=0)]
+        [Parameter(Mandatory=$true, ValueFromPipeline=$true, ValueFromPipelineByPropertyName=$false, Position=0)]
         [String] $Code,
 
         [Parameter(Mandatory=$false, ValueFromPipeline=$false, ValueFromPipelineByPropertyName=$false, Position=1)]
@@ -53,9 +53,12 @@ function Invoke-ShellgeiBot
     # Save image to file
     foreach ($resultImg in $result.images)
     {
-        $outImageFileName = "{0}.{1}" -f "ShellgeiBot_$(Get-Random)", $resultImg.format
+        # Generate file path
+        $now = [DateTime]::Now.ToString("yyyyMMdd_HHMMss_ffff")
+        $outImageFileName = "{0}.{1}" -f "ShellgeiBot_${now}", $resultImg.format
         $outImagePath = Join-Path -Path ([IO.Path]::GetTempPath()) -ChildPath $outImageFileName
 
+        # Convert base64 encoded images to binary 
         $binaryImage = [Convert]::FromBase64String($resultImg.image)
 
         # Write binary image to file
