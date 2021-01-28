@@ -1,6 +1,6 @@
 #!/usr/bin/env pwsh
 
-function Invoke-ShellGeiBot
+function Invoke-ShellgeiBot
 {
 
     Param
@@ -45,17 +45,18 @@ function Invoke-ShellGeiBot
     Write-Output $result.stdout
 
     # Print stderr of result
-    if ($result.stderr -ne "") {
+    if ($result.stderr -ne "") 
+    {
         Write-Error "$($result.stderr)"
     }
 
     # Save image to file
     foreach ($resultImg in $result.images)
     {
-        $outImageFileName = "{0}.{1}" -f "ShellGeiBot_$(Get-Random)", $resultImg.format
+        $outImageFileName = "{0}.{1}" -f "ShellgeiBot_$(Get-Random)", $resultImg.format
         $outImagePath = Join-Path -Path ([IO.Path]::GetTempPath()) -ChildPath $outImageFileName
 
-        $binaryImage = [System.Convert]::FromBase64String($resultImg.image)
+        $binaryImage = [Convert]::FromBase64String($resultImg.image)
 
         # Write binary image to file
         [IO.File]::WriteAllBytes($outImagePath, $binaryImage)
