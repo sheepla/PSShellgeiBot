@@ -36,8 +36,6 @@ function Invoke-ShellgeiBot
         images = $encodedImages
     } | ConvertTo-Json
 
-    Write-Information $request
-
     # Send a request to the API
     $result = Invoke-RestMethod -Method POST -Uri $URI -Body $body
 
