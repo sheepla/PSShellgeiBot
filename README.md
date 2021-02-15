@@ -3,15 +3,45 @@
 
 PSShellgeiBot PowerShellから [websh](https://github.com/jiro4989/websh) のAPIを使ってシェル芸を実行します。
 
-## 環境・バージョン
+## 環境
 
 ```
 Windows 10 Pro [64bit] (10.0.19041)
 ```
 
+## バージョン
+
+- PowerShell Core 7
+
 ```
-PS> pwsh.exe -version
-PowerShell 7.0.3
+PS> $PSVersionTable
+Name                           Value
+----                           -----
+PSVersion                      7.0.3
+PSEdition                      Core
+GitCommitId                    7.0.3
+OS                             Microsoft Windows 10.0.19041
+Platform                       Win32NT
+PSCompatibleVersions           {1.0, 2.0, 3.0, 4.0…}
+PSRemotingProtocolVersion      2.3
+SerializationVersion           1.1.0.1
+WSManStackVersion              3.0
+```
+
+- Windows PowerShell
+
+```
+PS> $PSVersionTable
+Name                           Value
+----                           -----
+PSVersion                      5.1.19041.610
+PSEdition                      Desktop
+PSCompatibleVersions           {1.0, 2.0, 3.0, 4.0...}
+BuildVersion                   10.0.19041.610
+CLRVersion                     4.0.30319.42000
+WSManStackVersion              3.0
+PSRemotingProtocolVersion      2.3
+SerializationVersion           1.1.0.1
 ```
 
 ## 機能
@@ -79,11 +109,6 @@ PS> Invoke-ShellGeiBot -ImagePath ./hoge.png -Code 'convert -resize x500! /media
 ```
 PS> . ./PSShellgeiBot/Invoke-ShellGeiBot.ps1
 ```
-
-## TODO
-
-- Module化して配布しやすくする
-- 不具合を直す
 
 ## 謝辞
 
