@@ -23,7 +23,12 @@ function Invoke-ShellgeiBot
         Write-Error "Too many image path arguments. You can specify up to 4 image paths."
         return
     }
+    
+    # Make execution code
+    $encodedCode = [Convert]::ToBase64String([Text.Encoding]::UTF8.GetBytes($Code))
+    $executionCode = "base64 -d <<< '{0}' | bash | base64" -f $encodedCode
 
+    # Make base64 string from local image files
     $encodedImages = @()
     foreach ($path in $ImagePath)
     {
@@ -31,8 +36,9 @@ function Invoke-ShellgeiBot
         $encodedImages += [Convert]::ToBase64String([IO.File]::ReadAllBytes($path))
     }
 
+    # Make body from hash table
     $body = @{
-        code = $Code
+        code = $executionCode
         images = $encodedImages
     } | ConvertTo-Json
 
@@ -40,7 +46,8 @@ function Invoke-ShellgeiBot
     $result = Invoke-RestMethod -Method POST -Uri $URI -Body $body
 
     # Print stdout of result
-    Write-Output $result.stdout
+    #$result.stdout
+    [System.Text.Encoding]::UTF8.GetString([Convert]::FromBase64String(($result.stdout)))
 
     # Print stderr of result
     if ($result.stderr -ne "") 
