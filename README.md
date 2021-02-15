@@ -104,10 +104,10 @@ PS> Invoke-ShellGeiBot -ImagePath ./hoge.png -Code 'convert -resize x500! /media
 
 ## インストール
 
-依存するモジュールやCLIツール等は今のところありません。ダウンロードしてドットソースで読み込みます。
+依存するモジュールやCLIツール等は今のところありません。ダウンロードして `Import-Module` で読み込みます。
 
 ```
-PS> . ./PSShellgeiBot/Invoke-ShellGeiBot.ps1
+PS> Import-Module ./PSShellgeiBot/Invoke-ShellGeiBot.ps1
 ```
 
 ## 謝辞
