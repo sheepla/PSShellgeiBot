@@ -28,7 +28,7 @@ function Invoke-ShbotApi
 
     foreach ($path in $UploadImage) {
         # Convert image file to Base64 string
-        $encodedImages += [Convert]::ToBase64String([IO.File]::ReadAllBytes($path))
+        $encodedImages += [Convert]::ToBase64String([IO.File]::ReadAllBytes((Resolve-Path $path)))
     }
 
     # Make body from hash table
