@@ -1,6 +1,6 @@
 #!/usr/bin/env pwsh
 
-function Invoke-Shbot
+function Invoke-ShbotApiRequest
 {
     Param
     (
@@ -74,5 +74,5 @@ function Invoke-Shbot
 
 function Test-ShbotStatus
 {
-    Invoke-RestMethod -Uri "https://websh.jiro4989.com/api/ping"
+    Invoke-RestMethod -Method GET -Uri "https://websh.jiro4989.com/api/ping"
 }
