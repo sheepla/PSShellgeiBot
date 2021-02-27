@@ -18,8 +18,7 @@ function Invoke-ShellgeiBot
     Set-Variable -Option Constant -Name URI -Value "https://websh.jiro4989.com/api/shellgei"
 
     # Check parameters
-    if ($ImagePath.Length -gt 4)
-    {
+    if ($ImagePath.Length -gt 4) {
         Write-Error "Too many image path arguments. You can specify up to 4 image paths."
         return
     }
@@ -30,8 +29,8 @@ function Invoke-ShellgeiBot
 
     # Make base64 string from local image files
     $encodedImages = @()
-    foreach ($path in $ImagePath)
-    {
+
+    foreach ($path in $ImagePath) {
         # Convert image file to Base64 string
         $encodedImages += [Convert]::ToBase64String([IO.File]::ReadAllBytes($path))
     }
@@ -50,14 +49,12 @@ function Invoke-ShellgeiBot
     [System.Text.Encoding]::UTF8.GetString([Convert]::FromBase64String(($result.stdout)))
 
     # Print stderr of result
-    if ($result.stderr -ne "") 
-    {
+    if ($result.stderr -ne "") {
         Write-Error "$($result.stderr)"
     }
 
     # Save image to file
-    foreach ($resultImg in $result.images)
-    {
+    foreach ($resultImg in $result.images) {
         # Generate file path
         $now = [DateTime]::Now.ToString("yyyyMMdd_HHMMss_ffff")
         $outImageFileName = "{0}.{1}" -f "ShellgeiBot_${now}", $resultImg.format
@@ -70,8 +67,7 @@ function Invoke-ShellgeiBot
         [IO.File]::WriteAllBytes($outImagePath, $binaryImage)
 
         # Open image file via default viewer
-        if ($ShowImage)
-        {
+        if ($ShowImage) {
             Invoke-Item $outImagePath
         }
     }
