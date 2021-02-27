@@ -8,13 +8,13 @@ function Invoke-ShbotApi
         [String] $Code,
 
         [Parameter(Mandatory=$false, ValueFromPipeline=$false, ValueFromPipelineByPropertyName=$false, Position=1)]
-        [String[]] $ImagePath
+        [String[]] $UploadImage
     )
 
     Set-Variable -Option Constant -Name URI -Value "https://websh.jiro4989.com/api/shellgei"
 
     # Check parameters
-    if ($ImagePath.Length -gt 4) {
+    if ($UploadImage.Length -gt 4) {
         Write-Error "Too many image path arguments. You can specify up to 4 image paths."
         return
     }
@@ -26,7 +26,7 @@ function Invoke-ShbotApi
     # Make base64 string from local image files
     $encodedImages = @()
 
-    foreach ($path in $ImagePath) {
+    foreach ($path in $UploadImage) {
         # Convert image file to Base64 string
         $encodedImages += [Convert]::ToBase64String([IO.File]::ReadAllBytes($path))
     }
@@ -52,7 +52,7 @@ function Invoke-Shbot
         [String] $Code,
 
         [Parameter(Mandatory=$false, ValueFromPipeline=$false, ValueFromPipelineByPropertyName=$false, Position=1)]
-        [String[]] $ImagePath,
+        [String[]] $UploadImage,
 
         [Parameter(Mandatory=$false, ValueFromPipeline=$false, ValueFromPipelineByPropertyName=$false)]
         [Switch] $ShowImage,
@@ -62,7 +62,7 @@ function Invoke-Shbot
     )
 
     # Check parameters
-    if ($ImagePath.Length -gt 4) {
+    if ($UploadImage.Length -gt 4) {
         Write-Error "Too many image path arguments. You can specify up to 4 image paths."
         return
     }
@@ -72,10 +72,10 @@ function Invoke-Shbot
     }
     
     # Invoke API and get result
-    if ($null -eq $ImagePath) {
+    if ($null -eq $UploadImage) {
         $result = Invoke-ShbotApi -Code $Code
     } else {
-        $result = Invoke-ShbotApi -Code $Code -ImagePath $ImagePath
+        $result = Invoke-ShbotApi -Code $Code UploadImage $UploadImage
     }
 
     # Print stdout
@@ -91,18 +91,18 @@ function Invoke-Shbot
         foreach ($resultImg in $result.images) {
             # Generate file path
             $now = [DateTime]::Now.ToString("yyyyMMdd_HHMMss_ffff")
-            $outImageFileName = "{0}.{1}" -f "ShellgeiBot_${now}", $resultImg.format
-            $outImagePath = Join-Path -Path ([IO.Path]::GetTempPath()) -ChildPath $outImageFileName
+            $fileName = "{0}.{1}" -f "ShellgeiBot_${now}", $resultImg.format
+            $destinationPath = Join-Path -Path ([IO.Path]::GetTempPath()) -ChildPath $fileName
 
             # Convert base64 encoded images to binary 
             $binaryImage = [Convert]::FromBase64String($resultImg.image)
 
             # Write binary image to file
-            [IO.File]::WriteAllBytes($outImagePath, $binaryImage)
+            [IO.File]::WriteAllBytes($destinationPath, $binaryImage)
 
             # Open image file via default viewer
             if ($ShowImage) {
-                Invoke-Item $outImagePath
+                Invoke-Item $destinationPath
             }
         }
     }
