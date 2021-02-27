@@ -75,7 +75,7 @@ function Invoke-Shbot
     if ($null -eq $UploadImage) {
         $result = Invoke-ShbotApi -Code $Code
     } else {
-        $result = Invoke-ShbotApi -Code $Code UploadImage $UploadImage
+        $result = Invoke-ShbotApi -Code $Code -UploadImage $UploadImage
     }
 
     # Print stdout
