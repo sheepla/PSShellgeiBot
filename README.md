@@ -59,11 +59,11 @@ SerializationVersion           1.1.0.1
 `-Code` パラメータに記述するか、パイプラインから入力します。
 
 ```pwsh
-PS> Invoke-ShellGeiBot -Code 'uname -a'
+PS> Invoke-Shbot -Code 'uname -a'
 
 Linux e9b38cbb8ec8 4.15.0-55-generic #60-Ubuntu SMP Tue Jul 2 18:22:20 UTC 2019 x86_64 x86_64 x86_64 GNU/Linux
 
-PS> 'uname -a' | Invoke-ShellGeiBot
+PS> 'uname -a' | Invoke-Shbot
 
 Linux d643fdbf8022 4.15.0-55-generic #60-Ubuntu SMP Tue Jul 2 18:22:20 UTC 2019 x86_64 x86_64 x86_64 GNU/Linux
 ```
@@ -71,9 +71,9 @@ Linux d643fdbf8022 4.15.0-55-generic #60-Ubuntu SMP Tue Jul 2 18:22:20 UTC 2019 
 `-Code` パラメータを指定しない場合はプロンプトが表示されます。
 
 ```pwsh
-PS> Invoke-ShellGeiBot
+PS> Invoke-Shbot
 
-cmdlet Invoke-ShellGeiBot at command pipeline position 1
+cmdlet Invoke-Shbot at command pipeline position 1
 
 Supply values for the following parameters:
 
@@ -90,7 +90,7 @@ hello
 `-ShowImage` スイッチを付けると、保存した画像をデフォルトの画像ビューアで開きます。
 
 ```pwsh
-PS> 'screenfetch | textimg -s' | Invoke-ShellGeiBot -ShowImage
+PS> 'screenfetch | textimg -s' | Invoke-Shbot -ShowImage
 ```
 
 
@@ -99,7 +99,7 @@ PS> 'screenfetch | textimg -s' | Invoke-ShellGeiBot -ShowImage
 `-ImagePath` パラメータを指定します。
 
 ```
-PS> Invoke-ShellGeiBot -ImagePath ./hoge.png -Code 'convert -resize x500! /media/0 /images/x'
+PS> Invoke-Shbot -ImagePath ./hoge.png -Code 'convert -resize x500! /media/0 /images/x'
 ```
 
 ## インストール
