@@ -1,6 +1,6 @@
 #!/usr/bin/env pwsh
 
-function Invoke-ShbotApiRequest
+function Invoke-ShbotApi
 {
     Param
     (
@@ -8,10 +8,7 @@ function Invoke-ShbotApiRequest
         [String] $Code,
 
         [Parameter(Mandatory=$false, ValueFromPipeline=$false, ValueFromPipelineByPropertyName=$false, Position=1)]
-        [String[]] $ImagePath,
-
-        [Parameter(Mandatory=$false, ValueFromPipeline=$false, ValueFromPipelineByPropertyName=$false)]
-        [Switch] $ShowImage
+        [String[]] $ImagePath
     )
 
     Set-Variable -Option Constant -Name URI -Value "https://websh.jiro4989.com/api/shellgei"
@@ -43,36 +40,77 @@ function Invoke-ShbotApiRequest
     # Send a request to the API
     $result = Invoke-RestMethod -Method POST -Uri $URI -Body $body
 
-    # Print stdout of result
-    #$result.stdout
+    # Print result
+    Write-Output $result
+}
+
+function Invoke-Shbot
+{
+    Param
+    (
+        [Parameter(Mandatory=$true, ValueFromPipeline=$true, ValueFromPipelineByPropertyName=$false, Position=0)]
+        [String] $Code,
+
+        [Parameter(Mandatory=$false, ValueFromPipeline=$false, ValueFromPipelineByPropertyName=$false, Position=1)]
+        [String[]] $ImagePath,
+
+        [Parameter(Mandatory=$false, ValueFromPipeline=$false, ValueFromPipelineByPropertyName=$false)]
+        [Switch] $ShowImage,
+
+        [Parameter(Mandatory=$false, ValueFromPipeline=$false, ValueFromPipelineByPropertyName=$false)]
+        [Switch] $NoSaveImage
+    )
+
+    # Check parameters
+    if ($ImagePath.Length -gt 4) {
+        Write-Error "Too many image path arguments. You can specify up to 4 image paths."
+        return
+    }
+    if ($ShowImage -and $NoSaveImage) {
+        Write-Error "ShowImage and NoSaveImage: Parameters cannot be specified at the same time"
+        return
+    }
+    
+    # Invoke API and get result
+    if ($null -eq $ImagePath) {
+        $result = Invoke-ShbotApi -Code $Code
+    } else {
+        $result = Invoke-ShbotApi -Code $Code -ImagePath $ImagePath
+    }
+
+    # Print stdout
     [System.Text.Encoding]::UTF8.GetString([Convert]::FromBase64String(($result.stdout)))
 
-    # Print stderr of result
+    # Print stderr
     if ($result.stderr -ne "") {
         Write-Error "$($result.stderr)"
     }
 
-    # Save image to file
-    foreach ($resultImg in $result.images) {
-        # Generate file path
-        $now = [DateTime]::Now.ToString("yyyyMMdd_HHMMss_ffff")
-        $outImageFileName = "{0}.{1}" -f "ShellgeiBot_${now}", $resultImg.format
-        $outImagePath = Join-Path -Path ([IO.Path]::GetTempPath()) -ChildPath $outImageFileName
+    if (-not $NoSaveImage) {
+        # Save image to file
+        foreach ($resultImg in $result.images) {
+            # Generate file path
+            $now = [DateTime]::Now.ToString("yyyyMMdd_HHMMss_ffff")
+            $outImageFileName = "{0}.{1}" -f "ShellgeiBot_${now}", $resultImg.format
+            $outImagePath = Join-Path -Path ([IO.Path]::GetTempPath()) -ChildPath $outImageFileName
 
-        # Convert base64 encoded images to binary 
-        $binaryImage = [Convert]::FromBase64String($resultImg.image)
+            # Convert base64 encoded images to binary 
+            $binaryImage = [Convert]::FromBase64String($resultImg.image)
 
-        # Write binary image to file
-        [IO.File]::WriteAllBytes($outImagePath, $binaryImage)
+            # Write binary image to file
+            [IO.File]::WriteAllBytes($outImagePath, $binaryImage)
 
-        # Open image file via default viewer
-        if ($ShowImage) {
-            Invoke-Item $outImagePath
+            # Open image file via default viewer
+            if ($ShowImage) {
+                Invoke-Item $outImagePath
+            }
         }
     }
 }
 
 function Test-ShbotStatus
 {
-    Invoke-RestMethod -Method GET -Uri "https://websh.jiro4989.com/api/ping"
+    Invoke-RestMethod -Uri "https://websh.jiro4989.com/api/ping"
 }
+
+Set-Alias -Name shbot -Value Invoke-Shbot
