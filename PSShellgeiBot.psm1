@@ -1,8 +1,7 @@
 #!/usr/bin/env pwsh
 
-function Invoke-ShellgeiBot
+function Invoke-Shbot
 {
-
     Param
     (
         [Parameter(Mandatory=$true, ValueFromPipeline=$true, ValueFromPipelineByPropertyName=$false, Position=0)]
@@ -71,4 +70,9 @@ function Invoke-ShellgeiBot
             Invoke-Item $outImagePath
         }
     }
+}
+
+function Test-ShbotStatus
+{
+    Invoke-RestMethod -Uri "https://websh.jiro4989.com/api/ping"
 }
